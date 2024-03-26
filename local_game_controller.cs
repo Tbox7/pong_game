@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using TMPro;
-using UnityEditor.Callbacks;
-using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
-using UnityEditor.PackageManager.Requests;
-using Unity.VisualScripting;
-using System;
 using UnityEngine.SceneManagement;
 
 public class local_game_controller : MonoBehaviour
@@ -39,12 +33,12 @@ public class local_game_controller : MonoBehaviour
             countdown.text = "";
             playball.GetComponent<ball_movement>().Play(); 
         }
-        if(playerScore1 == 2 ){
+        if(playerScore1 == 5 ){
             countdown.text = "PLAYER ONE WINS";
             playball.GetComponent<ball_movement>().Reset();
             StartCoroutine(Loop());
         }
-        if(playerScore2 == 2 ){
+        if(playerScore2 == 5 ){
             countdown.text = "PLAYER TWO WINS";
             playball.GetComponent<ball_movement>().Reset();
             StartCoroutine(Loop());
