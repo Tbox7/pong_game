@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class serverbuttons : NetworkBehaviour
+
+public class serverbuttons : MonoBehaviour
 {
     // Start is called befo{re the first frame update
     public void Hostbutton(){
@@ -24,3 +25,4 @@ public class serverbuttons : NetworkBehaviour
         
     }
 }
+
