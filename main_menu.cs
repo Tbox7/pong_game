@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +11,12 @@ public class main_menu : MonoBehaviour
     public void StartLocalGame()
     {
         SceneManager.LoadScene("Game Field",LoadSceneMode.Single);
+        
+    }
+    public void startmultiGame()
+    {
+        SceneManager.LoadScene("online game field",LoadSceneMode.Single);
+        
     }
 
     // Update is called once per frame
