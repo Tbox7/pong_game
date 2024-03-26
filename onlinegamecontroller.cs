@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using UnityEditor.Tilemaps;
 using UnityEditor;
 using UnityEngine.UIElements;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.Mathematics;
 
 public class onlinegamecontroller : NetworkBehaviour
 {
@@ -14,30 +14,32 @@ public class onlinegamecontroller : NetworkBehaviour
     public int playerNumber = 1; 
     float count = 999;
     public TextMeshProUGUI countdown, player1text, player2text;
-    public GameObject playerObject, pongitem, playball,playeronegoal,playertwogoal;
+    public GameObject playerObject, playeronegoal,playertwogoal;
     private int playerScore1;
+    private NetworkObject playball;
+    public NetworkObject pongitem;
     private int playerScore2;
     public void Newplayer(GameObject p){
         if(!IsHost){
+            p.transform.position = new Vector2(8,0);
             return;
         }
+        
         if(playerNumber == 1){
             p.transform.position = new Vector2(-8,0);
             playerNumber++;
         }
         else{
-            p.transform.position = new Vector2(8,0);
             playerNumber++;
         }
-        if(playerNumber == 2){
+        if(playerNumber == 3){
+            playball = Instantiate(pongitem, new Vector2(0,0),quaternion.identity);
+            playball.SpawnWithOwnership(OwnerClientId);
             startcountClientRPC();
         }
     }
     [ClientRpc]
-    void startcountClientRPC(){
-        count = 3;
-
-    }
+    void startcountClientRPC(){count = 3;}
 
     // Update is called once per frame
     void Update()
@@ -62,10 +64,13 @@ public class onlinegamecontroller : NetworkBehaviour
     }
     [ClientRpc]
     void updatescoreClientRpc(int p1,int p2){
+        playerScore1 = p1;
+        playerScore2 =p2;
         player1text.text = p1.ToString();
         player2text.text = p2.ToString();        
     }
     IEnumerator Loop(){
+        if(IsHost){ Destroy(playball);}
         yield return new WaitForSeconds(5f);
         NetworkManager.Singleton.Shutdown();
         SceneManager.LoadScene("menu",LoadSceneMode.Single);
@@ -75,12 +80,14 @@ public class onlinegamecontroller : NetworkBehaviour
         public void Player1Scored(){
         if(!IsHost){return;}
         playerScore1++;
+        updatescoreClientRpc(playerScore1,playerScore2);
         playball.GetComponent<ball_movement>().Reset();
-        count = 3;
+        startcountClientRPC();
     }
     public void Player2Scored(){
         playerScore2++;
+        updatescoreClientRpc(playerScore1,playerScore2);
         playball.GetComponent<ball_movement>().Reset();
-        count = 3;
+        startcountClientRPC();
     }
 }
