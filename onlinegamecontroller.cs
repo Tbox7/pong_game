@@ -13,7 +13,7 @@ public class onlinegamecontroller : NetworkBehaviour
     // Start is called before the first frame update
     public int playerNumber = 1; 
     float count = 999;
-    public TextMeshProUGUI countdown, player1text, player2text;
+    public TextMeshProUGUI countdown, player1text, player2text,codetext;
     public GameObject playerObject, playeronegoal,playertwogoal;
     private int playerScore1;
     private NetworkObject playball;
@@ -35,6 +35,7 @@ public class onlinegamecontroller : NetworkBehaviour
         if(playerNumber == 3){
             playball = Instantiate(pongitem, new Vector2(0,0),quaternion.identity);
             playball.SpawnWithOwnership(OwnerClientId);
+            codetext.text = "" ;
             startcountClientRPC();
         }
     }
@@ -53,11 +54,11 @@ public class onlinegamecontroller : NetworkBehaviour
             countdown.text = "";
             if(IsHost){playball.GetComponent<ball_movement>().Play();} 
         }
-        if(playerScore1 == 2 ){
+        if(playerScore1 == 5 ){
             countdown.text = "PLAYER ONE WINS";
             StartCoroutine(Loop());
         }
-        if(playerScore2 == 2 ){
+        if(playerScore2 == 5 ){
             countdown.text = "PLAYER TWO WINS";
             StartCoroutine(Loop());
         }
@@ -91,3 +92,4 @@ public class onlinegamecontroller : NetworkBehaviour
         startcountClientRPC();
     }
 }
+
